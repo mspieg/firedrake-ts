@@ -4,7 +4,13 @@ from contextlib import ExitStack
 
 from firedrake import dmhooks, slate, solving, solving_utils, ufl_expr, utils
 from firedrake import function
-from firedrake.petsc import PETSc, OptionsManager, flatten_parameters
+from firedrake.petsc import PETSc,  flatten_parameters
+try:
+    from petsctools.options import OptionsManager
+except ImportError:
+    # Fallback for older Firedrake versions
+    from firedrake.petsc import OptionsManager
+
 from firedrake.bcs import DirichletBC
 
 from firedrake_ts.solving_utils import check_ts_convergence, _TSContext

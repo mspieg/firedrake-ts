@@ -1,6 +1,5 @@
 from firedrake import *
 import firedrake_ts
-from firedrake.__future__ import interpolate
 
 mesh = UnitIntervalMesh(10)
 V = FunctionSpace(mesh, "P", 1)
@@ -19,8 +18,9 @@ bcs=[bc1, bc2]
 
 x = SpatialCoordinate(mesh)
 bump = conditional(lt(x[0], 0.5), 1.0, 0.0)
-assemble(interpolate(bump, u), tensor=u)
+assemble(interpolate(bump, V), tensor=u)
 print(f'{u.dat.data}=')
+
 
 
 def monitor(ts, step, t, x):

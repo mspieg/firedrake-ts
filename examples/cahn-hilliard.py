@@ -73,8 +73,16 @@ params["snes_monitor"] = None
 params["ts_monitor"] = None
 #params["ts_view"] = None
 
+outfile = output.VTKFile("result/cahn-hilliard.pvd")
+outfile.write(project(c, V, name="Concentration"), time=0.0)
+
+
+def ts_monitor(ts, steps, time, X):
+    outfile.write(project(c, V, name="Concentration"), time=time)
+
+
 problem = firedrake_ts.DAEProblem(F, u, u_t, (0.0, 2 * dt))
-solver = firedrake_ts.DAESolver(problem, solver_parameters=params)
+solver = firedrake_ts.DAESolver(problem, solver_parameters=params, monitor_callback=ts_monitor)
 
 if pc in ["fieldsplit", "ilu"]:
     sigma = 100
@@ -115,7 +123,10 @@ if pc in ["fieldsplit", "ilu"]:
     pc = solver.snes.ksp.pc
     pc.setFieldSplitSchurPreType(PETSc.PC.SchurPreType.USER, pc_schur)
 
+
 ts = solver.ts
 ts.setTimeStep(dt)
+ts.setEquationType(PETSc.TS.EquationType.IMPLICIT)
+ts.setFromOptions()
 
 solver.solve()
