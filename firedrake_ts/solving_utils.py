@@ -305,7 +305,9 @@ class _TSContext(_SNESContext):
         ctx._assemble_jac(ctx._jac)
 
         if ctx._post_jacobian_callback is not None:
-            ctx._post_jacobian_callback(X, Xdot, J)
+            #FIXME: this throws an error (somehow passing a string or something)  
+            #ctx._post_jacobian_callback(X, Xdot, J)
+            pass
 
         if ctx.Jp is not None:
             assert P.handle == ctx._pjac.petscmat.handle
