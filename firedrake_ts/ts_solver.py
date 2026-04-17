@@ -4,7 +4,12 @@ from contextlib import ExitStack
 
 from firedrake import dmhooks, slate, solving, solving_utils, ufl_expr, utils
 from firedrake import function
-from firedrake.petsc import PETSc,  flatten_parameters
+from firedrake.petsc import PETSc
+try:    
+    from petsctools import flatten_parameters
+except ImportError:
+    # Fallback for older Firedrake versions
+    from firedrake.petsc import flatten_parameters
 try:
     from petsctools.options import OptionsManager
 except ImportError:
@@ -88,6 +93,7 @@ class DAEProblem(object):
         self.Jp_eq_J = Jp is None
 
         self.u_restrict = u
+        self.u = u
         self.udot = udot
         self.tspan = tspan
         self.F = F
