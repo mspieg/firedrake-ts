@@ -1,6 +1,8 @@
 import ufl
 from itertools import chain
 from contextlib import ExitStack
+from functools import cached_property
+
 
 from firedrake import dmhooks, slate, solving, solving_utils, ufl_expr, utils
 from firedrake import function
@@ -134,7 +136,7 @@ class DAEProblem(object):
         for bc in self.bcs:
             yield from bc.dirichlet_bcs()
 
-    @utils.cached_property
+    @cached_property
     def dm(self):
         return self.u_restrict.function_space().dm
 
