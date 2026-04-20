@@ -305,9 +305,13 @@ class _TSContext(_SNESContext):
         ctx._assemble_jac(ctx._jac)
 
         if ctx._post_jacobian_callback is not None:
-            #FIXME: this throws an error (somehow passing a string or something)  
-            #ctx._post_jacobian_callback(X, Xdot, J)
-            pass
+            #FIXME: this throws an error dmhooks seems to return the string 'petsctools_0' instead of the expected context object, so we catch the error and print a warning instead of crashing.)  
+            try:
+                ctx._post_jacobian_callback(X, Xdot, J)
+            except Exception as e:
+                print(f"Error occurred while calling post_jacobian_callback: {e}")
+                ctx._post_jacobian_callback = None
+                pass
 
         if ctx.Jp is not None:
             assert P.handle == ctx._pjac.petscmat.handle
