@@ -309,9 +309,9 @@ class _TSContext(_SNESContext):
             try:
                 ctx._post_jacobian_callback(X, Xdot, J)
             except Exception as e:
-                print(f"Error occurred while calling post_jacobian_callback: {e}")
-                ctx._post_jacobian_callback = None
-                pass
+                print(f"Warning: while calling post_jacobian_callback: {e}")
+                ctx._post_jacobian_callback = None  
+
 
         if ctx.Jp is not None:
             assert P.handle == ctx._pjac.petscmat.handle
