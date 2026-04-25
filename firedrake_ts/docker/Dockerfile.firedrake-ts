@@ -1,0 +1,22 @@
+# Dockerfile for Firedrake with a full set of capabilities installed.
+
+FROM firedrakeproject/firedrake:latest
+
+# Architecture specific flags
+ARG ARM
+ARG X86
+RUN \
+        if [ $(( "${X86:-0}" + "${ARM64:-0}" )) -ne 1 ]; then \
+                echo "Error: must set only one of 'X86' and 'ARM64'" \
+                && exit 1; \
+        fi
+
+# install fixed branch of firedrake-ts
+ARG BRANCH="2026.4-fixes"
+
+RUN git clone --branch ${BRANCH} https://github.com/mspieg/firedrake-ts.git /opt/firedrake-ts \
+    &&  pip install --verbose /opt/firedrake-ts
+
+     
+     
+
