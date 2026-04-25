@@ -2,15 +2,6 @@
 
 FROM firedrakeproject/firedrake:latest
 
-# Architecture specific flags
-ARG ARM
-ARG X86
-RUN \
-        if [ $(( "${X86:-0}" + "${ARM64:-0}" )) -ne 1 ]; then \
-                echo "Error: must set only one of 'X86' and 'ARM64'" \
-                && exit 1; \
-        fi
-
 # install fixed branch of firedrake-ts
 ARG BRANCH="2026.4-fixes"
 
